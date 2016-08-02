@@ -32,6 +32,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     fluent-plugin-kubernetes_metadata_filter \
     fluent-plugin-elasticsearch \
     fluent-plugin-parser \
+    fluent-plugin-concat \
     fluent-plugin-logentries \
   && apt-get autoremove -y ${BUILD_DEPS} \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
