@@ -13,7 +13,7 @@ spec:
         role: loadbalancer
       containers:
       - name: fluentd-elasticsearch-userapp
-        image: registry:5000/kulo
+        image: sabaka/fluentd-docker-logs
         resources:
           limits:
             memory: 200Mi
