@@ -25,7 +25,7 @@ FROM ubuntu:14.04
 # Install prerequisites.
 RUN export DEBIAN_FRONTEND=noninteractive \
   && apt-get update -qq \
-  && BUILD_DEPS="curl make g++"
+  && BUILD_DEPS="curl make g++" \
   && apt-get install -y -q $BUILD_DEPS \
   && /usr/bin/curl -L https://td-toolbelt.herokuapp.com/sh/install-ubuntu-trusty-td-agent2.sh | sh \
   && td-agent-gem install \
