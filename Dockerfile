@@ -22,18 +22,18 @@
 
 FROM ubuntu:14.04
 
-# Disable prompts from apt.
-ENV DEBIAN_FRONTEND noninteractive
-
 # Install prerequisites.
-RUN apt-get update -qq \
-  && apt-get install -y -q curl make g++ \
+RUN export DEBIAN_FRONTEND=noninteractive \
+  && apt-get update -qq \
+  && BUILD_DEPS="curl make g++"
+  && apt-get install -y -q $BUILD_DEPS \
   && /usr/bin/curl -L https://td-toolbelt.herokuapp.com/sh/install-ubuntu-trusty-td-agent2.sh | sh \
   && td-agent-gem install \
     fluent-plugin-kubernetes_metadata_filter \
     fluent-plugin-elasticsearch \
     fluent-plugin-parser \
     fluent-plugin-logentries \
+  && apt-get autoremove -y ${BUILD_DEPS} \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     /usr/share/man /usr/share/doc /usr/share/doc-base
 
