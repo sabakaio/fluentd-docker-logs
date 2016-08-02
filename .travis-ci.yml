@@ -1,0 +1,30 @@
+language: python
+sudo: required
+
+go:
+  - 1.6
+
+services:
+  - docker
+
+env:
+  global:
+    - DOCKER_IMAGE=sabaka/fluentd-docker-logs
+
+script:
+  - docker build -t $DOCKER_IMAGE .
+  - >
+    if [ -n "$TRAVIS_TAG" ]; then
+      docker tag sabaka/kron "sabaka/kron:$TRAVIS_TAG"
+    fi
+
+after_success:
+  - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+  - >
+    if [ "$TRAVIS_BRANCH" == "master" ]; then
+      docker push $DOCKER_IMAGE;
+    fi
+  - >
+    if [ -n "$TRAVIS_TAG" ]; then
+      docker push "$DOCKER_IMAGE:$TRAVIS_TAG";
+    fi
