@@ -26,7 +26,7 @@ FROM ubuntu:14.04
 RUN export DEBIAN_FRONTEND=noninteractive \
   && apt-get update -qq \
   && BUILD_DEPS="curl make g++" \
-  && apt-get install -y -q $BUILD_DEPS \
+  && apt-get install -y -q $BUILD_DEPS inotify-tools \
   && /usr/bin/curl -L https://td-toolbelt.herokuapp.com/sh/install-ubuntu-trusty-td-agent2.sh | sh \
   && td-agent-gem install \
     fluent-plugin-concat \
@@ -44,4 +44,6 @@ RUN ulimit -n 65536 \
 
 COPY td-agent.conf /etc/td-agent/td-agent.conf
 
-ENTRYPOINT ["td-agent"]
+COPY run.sh /
+
+ENTRYPOINT ["/run.sh"]
