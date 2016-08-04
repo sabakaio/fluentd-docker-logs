@@ -32,7 +32,6 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     fluent-plugin-concat \
     fluent-plugin-elasticsearch \
     fluent-plugin-kubernetes_metadata_filter \
-    fluent-plugin-logentries \
     fluent-plugin-parser \
     fluent-plugin-rewrite-tag-filter \
   && apt-get autoremove -y ${BUILD_DEPS} \
@@ -40,10 +39,12 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     /usr/share/man /usr/share/doc /usr/share/doc-base
 
 RUN ulimit -n 65536 \
-    && sed -i -e "s/USER=td-agent/USER=root/" -e "s/GROUP=td-agent/GROUP=root/" /etc/init.d/td-agent
+    && sed -i -e "s/USER=td-agent/USER=root/" -e "s/GROUP=td-agent/GROUP=root/" /etc/init.d/td-agent \
+    && mkdir /etc/td-agent/conf.d
 
-COPY td-agent.conf /etc/td-agent/td-agent.conf
-
+COPY td-agent.conf /etc/td-agent/
+COPY conf.d/main.conf /etc/td-agent/conf.d/
+COPY plugin/out_logentries.rb /etc/td-agent/plugin/ 
 COPY run.sh /
 
 ENTRYPOINT ["/run.sh"]

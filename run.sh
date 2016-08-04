@@ -14,7 +14,7 @@ function tdagent_reload() {
 }
 
 function start_inotify_waiter() {
-  inotifywait -me moved_to /etc/td-agent | while read events; do tdagent_reload; done
+  inotifywait -me moved_to /etc/td-agent/conf.d | while read events; do tdagent_reload; done
 }
 
 trap graceful_stop_tdagent SIGTERM SIGINT
